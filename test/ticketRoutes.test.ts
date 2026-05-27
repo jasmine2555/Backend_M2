@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/typedef */
 import request from "supertest";
 import app from "../src/app";
 
@@ -119,6 +120,18 @@ describe("PUT /api/v1/tickets/:id", () => {
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("Invalid priority. Must be one of: critical, high, medium, low");
     });
+
+    it("should return 400 for invalid status", async () => {
+        // Arrange
+        const updateData = { status: "closed" };
+
+        // Act
+        const response = await request(app).put("/api/v1/tickets/1").send(updateData);
+
+        // Assert
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Invalid status. Must be one of: open, in-progress, resolved");
+    });
 });
 
 describe("DELETE /api/v1/tickets/:id", () => {
@@ -137,5 +150,27 @@ describe("DELETE /api/v1/tickets/:id", () => {
         // Assert
         expect(response.status).toBe(200);
         expect(response.body.message).toBe("Ticket deleted successfully");
+    });
+});
+
+describe("GET /api/v1/tickets/:id/urgency", () => {
+    it("should return urgency data for an existing ticket", async () => {
+        // Arrange & Act
+        const response = await request(app).get("/api/v1/tickets/1/urgency");
+
+        // Assert
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty("urgencyScore");
+        expect(response.body).toHaveProperty("urgencyLevel");
+        expect(response.body).toHaveProperty("priority");
+    });
+
+    it("should return 404 for urgency of non-existent ticket", async () => {
+        // Arrange & Act
+        const response = await request(app).get("/api/v1/tickets/999/urgency");
+
+        // Assert
+        expect(response.status).toBe(404);
+        expect(response.body.message).toBe("Ticket not found");
     });
 });

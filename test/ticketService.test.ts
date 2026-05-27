@@ -1,5 +1,5 @@
 import { calculateUrgency } from "../src/api/v1/services/ticketService";
-import { Ticket } from "../src/api/v1/interfaces/ticket";
+import { Ticket, UrgencyResponse } from "../src/api/v1/interfaces/ticket";
 
 function createMockTicket(overrides: Partial<Ticket> = {}): Ticket {
     return {
@@ -19,7 +19,7 @@ describe("calculateUrgency", () => {
         const ticket: Ticket = createMockTicket({ status: "resolved" });
 
         // Act
-        const result = calculateUrgency(ticket);
+        const result: UrgencyResponse = calculateUrgency(ticket);
 
         // Assert
         expect(result.urgencyLevel).toBe("RESOLVED");
@@ -34,7 +34,7 @@ describe("calculateUrgency", () => {
         });
 
         // Act
-        const result = calculateUrgency(ticket);
+        const result: UrgencyResponse = calculateUrgency(ticket);
 
         // Assert
         expect(result.urgencyScore).toBe(10);
@@ -52,7 +52,7 @@ describe("calculateUrgency", () => {
         });
 
         // Act
-        const result = calculateUrgency(ticket);
+        const result: UrgencyResponse = calculateUrgency(ticket);
 
         // Assert: base 30 + (10 * 2) = 50
         expect(result.urgencyScore).toBe(50);
@@ -70,7 +70,7 @@ describe("calculateUrgency", () => {
         });
 
         // Act
-        const result = calculateUrgency(ticket);
+        const result: UrgencyResponse = calculateUrgency(ticket);
 
         // Assert: base 50 + (20 * 2) = 90
         expect(result.urgencyScore).toBe(90);
