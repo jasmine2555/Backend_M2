@@ -151,6 +151,15 @@ describe("DELETE /api/v1/tickets/:id", () => {
         expect(response.status).toBe(200);
         expect(response.body.message).toBe("Ticket deleted successfully");
     });
+
+    it("should return 404 when deleting non-existent ticket", async () => {
+        // Arrange & Act
+        const response = await request(app).delete("/api/v1/tickets/999");
+
+        // Assert
+        expect(response.status).toBe(404);
+        expect(response.body.message).toBe("Ticket not found");
+    });
 });
 
 describe("GET /api/v1/tickets/:id/urgency", () => {
