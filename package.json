@@ -1,0 +1,21 @@
+{
+  "name": "assignment_2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasmine2555/Backend_M2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jasmine2555/Backend_M2/issues"
+  },
+  "homepage": "https://github.com/jasmine2555/Backend_M2#readme"
+}
