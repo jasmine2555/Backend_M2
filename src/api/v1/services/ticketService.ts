@@ -1,8 +1,15 @@
-import { Ticket, CreateTicketRequest, UpdateTicketRequest } from "../interfaces/ticket";
+import { Ticket, CreateTicketRequest, UpdateTicketRequest, UrgencyResponse } from "../interfaces/ticket";
 import tickets from "../../../data/tickets";
 
 const VALID_PRIORITIES: string[] = ["critical", "high", "medium", "low"];
 const VALID_STATUSES: string[] = ["open", "in-progress", "resolved"];
+
+const BASE_SCORES: Record<string, number> = {
+    critical: 50,
+    high: 30,
+    medium: 20,
+    low: 10,
+};
 
 export function getAllTickets(): Ticket[] {
     return tickets;
@@ -76,4 +83,46 @@ export function deleteTicket(id: number): boolean {
 
     tickets.splice(ticketIndex, 1);
     return true;
+}
+
+export function calculateUrgency(ticket: Ticket): UrgencyResponse {
+    if (ticket.status === "resolved") {
+        return {
+            id: ticket.id,
+            title: ticket.title,
+            priority: ticket.priority,
+            status: ticket.status,
+            createdAt: ticket.createdAt,
+            urgencyScore: 0,
+            urgencyLevel: "RESOLVED",
+        };
+    }
+
+    const now: Date = new Date();
+    const createdAt: Date = new Date(ticket.createdAt);
+    const ageInDays: number = Math.floor((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24));
+
+    const baseScore: number = BASE_SCORES[ticket.priority] || 0;
+    const urgencyScore: number = baseScore + ageInDays * 2;
+
+    let urgencyLevel: string;
+    if (urgencyScore >= 80) {
+        urgencyLevel = "CRITICAL";
+    } else if (urgencyScore >= 50) {
+        urgencyLevel = "HIGH";
+    } else if (urgencyScore >= 30) {
+        urgencyLevel = "MEDIUM";
+    } else {
+        urgencyLevel = "LOW";
+    }
+
+    return {
+        id: ticket.id,
+        title: ticket.title,
+        priority: ticket.priority,
+        status: ticket.status,
+        createdAt: ticket.createdAt,
+        urgencyScore,
+        urgencyLevel,
+    };
 }
