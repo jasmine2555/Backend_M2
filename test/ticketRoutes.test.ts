@@ -64,6 +64,21 @@ describe("POST /api/v1/tickets", () => {
         expect(response.body.status).toBe("open");
     });
 
+    it("should return 400 when description is missing", async () => {
+        // Arrange
+        const invalidTicket = {
+            title: "Test ticket",
+            priority: "high",
+        };
+
+        // Act
+        const response = await request(app).post("/api/v1/tickets").send(invalidTicket);
+
+        // Assert
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Missing required field: description");
+    });
+
     it("should return 400 when title is missing", async () => {
         // Arrange
         const invalidTicket = {
