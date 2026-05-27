@@ -8,8 +8,13 @@ const app: Application = express();
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.get("/health", (_req: Request, res: Response) => {
-    res.status(HttpStatusCode.OK).json({ status: "OK" });
+app.get("/api/v1/health", (_req: Request, res: Response) => {
+    res.status(HttpStatusCode.OK).json({
+        status: "OK",
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+        version: "1.0.0",
+    });
 });
 
 app.use("/api/v1/tickets", ticketRoutes);
