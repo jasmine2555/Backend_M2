@@ -8,6 +8,7 @@ export default tseslint.config(
             "**/dist/*",
             "**coverage/*",
             "**.github/*",
+            "**/test/*",
             "eslint.config.mjs",
             "jest.config.ts",
         ],
