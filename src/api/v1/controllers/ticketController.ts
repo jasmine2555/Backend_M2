@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import HttpStatusCode from "../../../constants/httpStatusCodes";
+import { Ticket, UrgencyResponse } from "../interfaces/ticket";
 import {
     getAllTickets,
     getTicketById,
@@ -10,13 +11,13 @@ import {
 } from "../services/ticketService";
 
 export function handleGetAllTickets(_req: Request, res: Response): void {
-    const tickets = getAllTickets();
+    const tickets: Ticket[] = getAllTickets();
     res.status(HttpStatusCode.OK).json(tickets);
 }
 
 export function handleGetTicketById(req: Request, res: Response): void {
     const id: number = parseInt(req.params.id as string, 10);
-    const ticket = getTicketById(id);
+    const ticket: Ticket | undefined = getTicketById(id);
 
     if (!ticket) {
         res.status(HttpStatusCode.NOT_FOUND).json({ message: "Ticket not found" });
@@ -27,7 +28,7 @@ export function handleGetTicketById(req: Request, res: Response): void {
 }
 
 export function handleCreateTicket(req: Request, res: Response): void {
-    const result = createTicket(req.body);
+    const result: { ticket?: Ticket; error?: string } = createTicket(req.body);
 
     if (result.error) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ message: result.error });
@@ -39,7 +40,7 @@ export function handleCreateTicket(req: Request, res: Response): void {
 
 export function handleUpdateTicket(req: Request, res: Response): void {
     const id: number = parseInt(req.params.id as string, 10);
-    const result = updateTicket(id, req.body);
+    const result: { ticket?: Ticket; error?: string } = updateTicket(id, req.body);
 
     if (result.error === "Ticket not found") {
         res.status(HttpStatusCode.NOT_FOUND).json({ message: result.error });
@@ -68,13 +69,13 @@ export function handleDeleteTicket(req: Request, res: Response): void {
 
 export function handleGetTicketUrgency(req: Request, res: Response): void {
     const id: number = parseInt(req.params.id as string, 10);
-    const ticket = getTicketById(id);
+    const ticket: Ticket | undefined = getTicketById(id);
 
     if (!ticket) {
         res.status(HttpStatusCode.NOT_FOUND).json({ message: "Ticket not found" });
         return;
     }
 
-    const urgency = calculateUrgency(ticket);
+    const urgency: UrgencyResponse = calculateUrgency(ticket);
     res.status(HttpStatusCode.OK).json(urgency);
 }
