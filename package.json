@@ -17,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/jasmine2555/Backend_M2/issues"
   },
-  "homepage": "https://github.com/jasmine2555/Backend_M2#readme"
+  "homepage": "https://github.com/jasmine2555/Backend_M2#readme",
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  }
 }
