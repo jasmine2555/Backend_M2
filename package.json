@@ -2,9 +2,13 @@
   "name": "assignment_2",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node src/server.ts",
+    "test": "jest --forceExit --detectOpenHandles",
+    "lint": "eslint . --ext .ts"
   },
   "repository": {
     "type": "git",
@@ -19,8 +23,14 @@
   },
   "homepage": "https://github.com/jasmine2555/Backend_M2#readme",
   "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/morgan": "^1.9.10",
     "@types/node": "^25.9.1",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "morgan": "^1.10.1"
   }
 }
